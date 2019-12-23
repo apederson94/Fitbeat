@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "913434143551",
+    "firebase_url": "https://speedy-code-262616.firebaseio.com",
+    "project_id": "speedy-code-262616",
+    "storage_bucket": "speedy-code-262616.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913434143551:android:b8fa0d09362ba53704418a",
+        "android_client_info": {
+          "package_name": "ampederson.fitbeat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913434143551-10rp4i17hpn38q947e4u48sslf5bgski.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ampederson.fitbeat",
+            "certificate_hash": "7760f23f6a0ea5a1cdc1876d34db828f80849fe7"
+          }
+        },
+        {
+          "client_id": "913434143551-fl0t544oc4149kftqsgpi3v2e7brq842.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBW_12kvrNKFt1ZuleiujnNjyECdkRa6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913434143551-fl0t544oc4149kftqsgpi3v2e7brq842.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
