@@ -13,72 +13,50 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     networkManager = NetworkManager.getInstance();
     accountManager = AccountManager().initialize();
-    networkManager.then((manager) { manager.login(); });
+    networkManager.then((manager) {
+      manager.login();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(
-              title: Text(
-                "Fitbeat",
-                textDirection: TextDirection.ltr,
-              ),
-              actions: <Widget>[
-                FutureBuilder(
-                  future: accountManager,
-                  builder: (context, AsyncSnapshot<AccountManager> snapshot) {
-                    if (snapshot.hasData) {
-                      GoogleAccount account =
-                          snapshot.data.getAccount("account");
-                      if (account.displayName != null) {
-                        return IconButton(
-                            icon: const Icon(Icons.autorenew),
-                            tooltip: "Refresh Data",
-                            onPressed: () {
-                              //TODO
-                            });
-                      }
-                    }
-                    return FlatButton(
-                      child: Text(
-                        "Login",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        this.networkManager.then((manager) {
-                          manager.login().then((account) {
-                            if (account != null) {
-                              AccountManager()
-                                  .saveNewAccount(GoogleAccount(account));
-                            }
-                          });
-                        }).catchError((error) {
-                          print(error);
-                        });
-                      },
-                    );
-                  },
-                )
-              ],
-            ),
-            body: Center(
-                child: FutureBuilder(
-              future: accountManager,
-              builder: (context, AsyncSnapshot<AccountManager> snapshot) {
-                if (snapshot.hasData) {
-                  GoogleAccount account =
-                      AccountManager().getAccount('account');
-                  if (account.displayName != null) {
-                    return Text(
-                      "Signed into Google as: ${AccountManager().getAccount("account").displayName}",
-                    );
-                  }
-                }
-                return Text("Please login.");
-              },
-            ))));
+        home: FutureBuilder(
+            future: accountManager,
+            builder: (context, AsyncSnapshot<AccountManager> snapshot) {
+              return Scaffold(
+                  appBar: AppBar(
+                    title: Text(
+                      'Fitbeat',
+                      textDirection: TextDirection.ltr,
+                    ),
+                    actions: <Widget>[
+                      snapshot.hasData &&
+                              !snapshot.data.getAccount('account').isEmpty()
+                          ? IconButton(
+                              icon: const Icon(Icons.autorenew),
+                              tooltip: "Refresh Data",
+                              onPressed: () {
+                                //TODO
+                              })
+                          : FlatButton(
+                              child: Text(
+                                "Login",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () {
+                                //TODO
+                              }),
+                    ],
+                  ),
+                  body: Center(
+                      child: snapshot.hasData &&
+                              !snapshot.data.getAccount('account').isEmpty()
+                          ? Text(
+                              "Signed into Google as: ${AccountManager().getAccount("account").displayName}",
+                            )
+                          : Text("Please Login")));
+            }));
   }
 }
 

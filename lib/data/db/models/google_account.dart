@@ -29,4 +29,8 @@ class GoogleAccount extends HiveObject {
   GoogleAccount.empty() {
     //do nothing
   }
+
+  bool isEmpty() {
+    return email == null;
+  }
 }
