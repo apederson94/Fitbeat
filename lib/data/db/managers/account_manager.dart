@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:hive/hive.dart';
@@ -38,5 +37,4 @@ class AccountManager {
   GoogleAccount getAccount(String id) {
     return box.get('account', defaultValue: GoogleAccount.empty());
   }
-
 }

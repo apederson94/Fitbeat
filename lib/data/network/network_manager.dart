@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:fitbeat/data/db/managers/account_manager.dart';
 import 'package:fitbeat/data/db/models/google_account.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:fitbeat/utils/extensions.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:google_sign_in/google_sign_in.dart';
 
 class GoogleAuthInfo {
   String clientId;
@@ -42,12 +42,14 @@ class NetworkManager {
 
   static Future<NetworkManager> getInstance() async {
     if (_instance == null) {
-      String authJson = await GoogleAuthInfo.getFileData("assets/google_auth.json");
+      String authJson =
+          await GoogleAuthInfo.getFileData("assets/google_auth.json");
       _instance = NetworkManager();
       GoogleAuthInfo authInfo = GoogleAuthInfo(jsonDecode(authJson));
       _instance.googleAuthInfo = authInfo;
       var scopes = authInfo.scopes;
-      _instance._googleSignIn = GoogleSignIn(scopes: scopes, clientId: authInfo.clientId);
+      _instance._googleSignIn =
+          GoogleSignIn(scopes: scopes, clientId: authInfo.clientId);
     }
 
     return _instance;

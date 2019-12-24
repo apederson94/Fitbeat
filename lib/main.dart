@@ -1,8 +1,6 @@
 import 'package:fitbeat/data/db/managers/account_manager.dart';
-import 'package:flutter/material.dart';
 import 'package:fitbeat/data/network/network_manager.dart';
-
-import 'data/db/models/google_account.dart';
+import 'package:flutter/material.dart';
 
 class _MyAppState extends State<MyApp> {
   Future<NetworkManager> networkManager;
