@@ -1,83 +1,88 @@
+import 'package:fitbeat/data/db/managers/account_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:fitbeat/utils/networkManager.dart';
-import 'package:googleapis/chat/v1.dart';
+import 'package:fitbeat/data/network/network_manager.dart';
+
+import 'data/db/models/google_account.dart';
 
 class _MyAppState extends State<MyApp> {
-  Future<NetworkManager> manager;
-  Future<GoogleSignInAccount> account;
-  bool isLoggedIn = false;
+  Future<NetworkManager> networkManager;
+  Future<AccountManager> accountManager;
 
   @override
   void initState() {
     super.initState();
-    manager = NetworkManager.getInstance();
+    networkManager = NetworkManager.getInstance();
+    accountManager = AccountManager().initialize();
+    networkManager.then((manager) { manager.login(); });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-          appBar: AppBar(
-            title: Text("FitBeat", textDirection: TextDirection.ltr,),
-            actions: <Widget>[
-              !isLoggedIn ? FlatButton(
-                color: Colors.white,
-                child: Text("Login"),
-                onPressed: () {
-                  this.manager.then((manager) {
-                    manager.login().then((account) {
-                      if (account != null) {
-                        setState(() {
-                          this.manager.then((manager) {
-                            manager.account = account;
-                            manager.isLoggedIn = true;
-                            isLoggedIn = true;
-                          });
-                        });
-                      }
-                    });
-                  });
-                },
-              ) :
-              IconButton(
-                icon: const Icon(Icons.autorenew),
-                tooltip: "Refresh Data",
-                onPressed: () {
-                  //TODO
-                },
+            appBar: AppBar(
+              title: Text(
+                "Fitbeat",
+                textDirection: TextDirection.ltr,
               ),
-            ],
-          ),
-          body: Center(
-              child: FutureBuilder<NetworkManager>(
-                future: manager,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final networkManager = snapshot.data;
-                    if (networkManager.isLoggedIn) {
-                      return Text(
-                          "Signed into Google as: ${networkManager.account.displayName}",
-                      );
-                    } else {
-                      return Text("Please login.");
+              actions: <Widget>[
+                FutureBuilder(
+                  future: accountManager,
+                  builder: (context, AsyncSnapshot<AccountManager> snapshot) {
+                    if (snapshot.hasData) {
+                      GoogleAccount account =
+                          snapshot.data.getAccount("account");
+                      if (account.displayName != null) {
+                        return IconButton(
+                            icon: const Icon(Icons.autorenew),
+                            tooltip: "Refresh Data",
+                            onPressed: () {
+                              //TODO
+                            });
+                      }
                     }
-                  } else if (snapshot.hasError) {
-                    return Text("Error occurred. Please try logging in again.");
-                  } else {
-                    return Text("Please Login.");
+                    return FlatButton(
+                      child: Text(
+                        "Login",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        this.networkManager.then((manager) {
+                          manager.login().then((account) {
+                            if (account != null) {
+                              AccountManager()
+                                  .saveNewAccount(GoogleAccount(account));
+                            }
+                          });
+                        }).catchError((error) {
+                          print(error);
+                        });
+                      },
+                    );
+                  },
+                )
+              ],
+            ),
+            body: Center(
+                child: FutureBuilder(
+              future: accountManager,
+              builder: (context, AsyncSnapshot<AccountManager> snapshot) {
+                if (snapshot.hasData) {
+                  GoogleAccount account =
+                      AccountManager().getAccount('account');
+                  if (account.displayName != null) {
+                    return Text(
+                      "Signed into Google as: ${AccountManager().getAccount("account").displayName}",
+                    );
                   }
-                },
-              )
-          ),
-
-        )
-    );
+                }
+                return Text("Please login.");
+              },
+            ))));
   }
 }
 
 void main() => runApp(MyApp());
-
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
@@ -86,7 +91,6 @@ class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
-
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -159,10 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .display1,
+              style: Theme.of(context).textTheme.display1,
             ),
           ],
         ),
@@ -175,4 +176,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-

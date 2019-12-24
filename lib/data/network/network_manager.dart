@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:fitbeat/data/db/managers/account_manager.dart';
+import 'package:fitbeat/data/db/models/google_account.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:fitbeat/utils/extensions.dart';
@@ -36,31 +38,31 @@ class GoogleAuthInfo {
 class NetworkManager {
   GoogleAuthInfo googleAuthInfo;
   GoogleSignIn _googleSignIn;
-  GoogleSignInAccount account;
-  bool isLoggedIn = false;
-  static NetworkManager instance;
+  static NetworkManager _instance;
 
   static Future<NetworkManager> getInstance() async {
-    if (instance == null) {
+    if (_instance == null) {
       String authJson = await GoogleAuthInfo.getFileData("assets/google_auth.json");
-      instance = NetworkManager();
+      _instance = NetworkManager();
       GoogleAuthInfo authInfo = GoogleAuthInfo(jsonDecode(authJson));
-      instance.googleAuthInfo = authInfo;
+      _instance.googleAuthInfo = authInfo;
       var scopes = authInfo.scopes;
-      instance._googleSignIn = GoogleSignIn(scopes: scopes, clientId: authInfo.clientId);
+      _instance._googleSignIn = GoogleSignIn(scopes: scopes, clientId: authInfo.clientId);
     }
 
-    return instance;
+    return _instance;
   }
 
   Future<GoogleSignInAccount> login() async {
     GoogleSignInAccount account;
     try {
       account = await _googleSignIn.signIn();
+      AccountManager accountManager = AccountManager();
+      await accountManager.initialize();
+      accountManager.saveNewAccount(GoogleAccount(account));
     } catch (error) {
       print(error);
     }
-
     return account;
   }
 }
