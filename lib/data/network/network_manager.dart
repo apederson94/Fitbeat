@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:fitbeat/data/db/managers/account_manager.dart';
-import 'package:fitbeat/data/db/models/google_account.dart';
+import 'package:fitbeat/data/db/models/account_details.dart';
 import 'package:fitbeat/utils/extensions.dart';
+import 'package:fitbeat/utils/utils.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 class GoogleAuthInfo {
   String clientId;
@@ -61,10 +64,38 @@ class NetworkManager {
       account = await _googleSignIn.signIn();
       AccountManager accountManager = AccountManager();
       await accountManager.initialize();
-      accountManager.saveNewAccount(GoogleAccount(account));
+      accountManager.saveNewAccount(AccountDetails(account));
     } catch (error) {
       print(error);
     }
     return account;
+  }
+
+  String _buildFitbitUrl(Map<String, dynamic> cryptoKeys) {
+    String clientId = '22BBXX';
+    String responseType = 'code';
+    String scope = 'activity';
+    String redirect_uri ='https://fitbeat.page.link/jdF1';
+    String code_challenge = cryptoKeys['encoded'].toString();
+    String code_challenge_method = 'S256';
+    String url =  'https://www.fitbit.com/oauth2/authorize';
+    url += '?client_id=$clientId';
+    url += '&response_type=$responseType';
+    url += '&scope=$scope';
+    url += '&redirect_uri=$redirect_uri';
+    url += '&code_challenge=$code_challenge';
+    url += '&code_challenge_method=$code_challenge_method';
+
+    return url;
+  }
+
+  void authorizeFitbit() async {
+    Map<String, dynamic> cryptoKeys = utils.createCryptoRandomString();
+    String url = _buildFitbitUrl(cryptoKeys);
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      //TODO
+    }
   }
 }

@@ -1,19 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'google_account.dart';
+part of 'account_details.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class GoogleAccountAdapter extends TypeAdapter<GoogleAccount> {
+class GoogleAccountAdapter extends TypeAdapter<AccountDetails> {
   @override
-  GoogleAccount read(BinaryReader reader) {
+  AccountDetails read(BinaryReader reader) {
     var numOfFields = reader.readByte();
     var fields = <int, dynamic>{
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return GoogleAccount.empty()
+    return AccountDetails.empty()
       ..displayName = fields[0] as String
       ..email = fields[1] as String
       ..id = fields[2] as String
@@ -21,7 +21,7 @@ class GoogleAccountAdapter extends TypeAdapter<GoogleAccount> {
   }
 
   @override
-  void write(BinaryWriter writer, GoogleAccount obj) {
+  void write(BinaryWriter writer, AccountDetails obj) {
     writer
       ..writeByte(4)
       ..writeByte(0)

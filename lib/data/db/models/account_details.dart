@@ -1,10 +1,10 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 
-part 'google_account.g.dart';
+part 'account_details.g.dart';
 
 @HiveType()
-class GoogleAccount extends HiveObject {
+class AccountDetails extends HiveObject {
   @HiveField(0)
   String displayName;
 
@@ -17,14 +17,17 @@ class GoogleAccount extends HiveObject {
   @HiveField(3)
   String photoUrl;
 
-  GoogleAccount(GoogleSignInAccount account) {
+  @HiveField(4)
+  String fitbitToken;
+
+  AccountDetails(GoogleSignInAccount account) {
     displayName = account.displayName;
     email = account.email;
     id = account.id;
     photoUrl = account.photoUrl;
   }
 
-  GoogleAccount.empty() {
+  AccountDetails.empty() {
     //do nothing
   }
 

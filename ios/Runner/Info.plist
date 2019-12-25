@@ -30,7 +30,16 @@
 				<string>com.googleusercontent.apps.913434143551-je6e0dltj9celd7pjtf6vr6fka9oe1o3</string>
 			</array>
 		</dict>
-		<dict/>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Fitbeat Deeplinks</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>https://fitbeat.page.link</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>

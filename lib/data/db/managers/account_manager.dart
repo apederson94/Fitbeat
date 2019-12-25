@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../models/google_account.dart';
+import '../models/account_details.dart';
 
 class AccountManager {
   static final AccountManager _manager = AccountManager._create();
-  Box<GoogleAccount> box;
+  Box<AccountDetails> box;
   bool initialized = false;
 
   factory AccountManager() {
@@ -25,16 +25,18 @@ class AccountManager {
       Hive.registerAdapter(GoogleAccountAdapter(), 0);
       initialized = true;
     }
-    Box<GoogleAccount> box = await Hive.openBox<GoogleAccount>('account');
-    this.box = box;
+    if (!Hive.isBoxOpen('account')) {
+      Box<AccountDetails> box = await Hive.openBox<AccountDetails>('account');
+      this.box = box;
+    }
     return this;
   }
 
-  void saveNewAccount(GoogleAccount account) {
+  void saveNewAccount(AccountDetails account) {
     box.put('account', account);
   }
 
-  GoogleAccount getAccount(String id) {
-    return box.get('account', defaultValue: GoogleAccount.empty());
+  AccountDetails getAccount(String id) {
+    return box.get('account', defaultValue: AccountDetails.empty());
   }
 }
