@@ -27,7 +27,7 @@ dependencies:
   path_provider: any
   url_launcher: any
   crypto: any
-  firebase_dynamic_links: any
+  uni_links: any
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

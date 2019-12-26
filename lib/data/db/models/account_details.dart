@@ -20,6 +20,18 @@ class AccountDetails extends HiveObject {
   @HiveField(4)
   String fitbitToken;
 
+  @HiveField(5)
+  String userId;
+
+  @HiveField(6)
+  Set<String> scopes = Set<String>();
+
+  @HiveField(7)
+  String tokenType;
+
+  @HiveField(8)
+  String expiresIn;
+
   AccountDetails(GoogleSignInAccount account) {
     displayName = account.displayName;
     email = account.email;

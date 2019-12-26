@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:fitbeat/data/db/managers/account_manager.dart';
 import 'package:fitbeat/data/db/models/account_details.dart';
@@ -7,7 +8,6 @@ import 'package:fitbeat/utils/utils.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:http/http.dart' as http;
 
 class GoogleAuthInfo {
   String clientId;
@@ -71,31 +71,12 @@ class NetworkManager {
     return account;
   }
 
-  String _buildFitbitUrl(Map<String, dynamic> cryptoKeys) {
-    String clientId = '22BBXX';
-    String responseType = 'code';
-    String scope = 'activity';
-    String redirect_uri ='https://fitbeat.page.link/jdF1';
-    String code_challenge = cryptoKeys['encoded'].toString();
-    String code_challenge_method = 'S256';
-    String url =  'https://www.fitbit.com/oauth2/authorize';
-    url += '?client_id=$clientId';
-    url += '&response_type=$responseType';
-    url += '&scope=$scope';
-    url += '&redirect_uri=$redirect_uri';
-    url += '&code_challenge=$code_challenge';
-    url += '&code_challenge_method=$code_challenge_method';
-
-    return url;
-  }
-
   void authorizeFitbit() async {
-    Map<String, dynamic> cryptoKeys = utils.createCryptoRandomString();
-    String url = _buildFitbitUrl(cryptoKeys);
-    if (await canLaunch(url)) {
-      await launch(url);
+    final authEndpoint = 'https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=22BBXX&redirect_uri=fitbeat%3A%2F%2Fauth&scope=activity';
+    if (await canLaunch(authEndpoint)) {
+      await launch(authEndpoint);
     } else {
-      //TODO
+      log('could not laucn $authEndpoint', name: 'amp845');
     }
   }
 }

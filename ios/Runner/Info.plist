@@ -37,7 +37,7 @@
 			<string>Fitbeat Deeplinks</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>https://fitbeat.page.link</string>
+				<string>fitbeat</string>
 			</array>
 		</dict>
 	</array>
