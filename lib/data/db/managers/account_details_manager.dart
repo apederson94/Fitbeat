@@ -1,28 +1,29 @@
 import 'dart:io';
 
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../models/account_details.dart';
 
-class AccountManager {
-  static final AccountManager _manager = AccountManager._create();
+class AccountDetailsHiveManager {
+  static final AccountDetailsHiveManager _manager = AccountDetailsHiveManager._create();
   Box<AccountDetails> box;
   bool initialized = false;
 
-  factory AccountManager() {
+  factory AccountDetailsHiveManager() {
     return _manager;
   }
 
-  AccountManager._create() {
+  AccountDetailsHiveManager._create() {
     //do nothing
   }
 
-  Future<AccountManager> initialize() async {
+  Future<AccountDetailsHiveManager> initialize() async {
     Directory directory = await getApplicationDocumentsDirectory();
     if (!initialized) {
       Hive.init(directory.path);
-      Hive.registerAdapter(GoogleAccountAdapter(), 0);
+      Hive.registerAdapter(AccountDetailsAdapter(), 0);
       initialized = true;
     }
     if (!Hive.isBoxOpen('account')) {
@@ -32,7 +33,10 @@ class AccountManager {
     return this;
   }
 
-  void saveNewAccount(AccountDetails account) {
+  void saveNewAccount(GoogleSignInAccount googleAccount) async {
+    AccountDetails account = AccountDetails(googleAccount);
+    GoogleSignInAuthentication auth = await googleAccount.authentication;
+    account.googleAccessToken = auth.accessToken;
     box.put('account', account);
   }
 

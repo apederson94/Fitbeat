@@ -24,13 +24,16 @@ class AccountDetails extends HiveObject {
   String userId;
 
   @HiveField(6)
-  Set<String> scopes = Set<String>();
+  List<String> scopes = List<String>();
 
   @HiveField(7)
   String tokenType;
 
   @HiveField(8)
   String expiresIn;
+
+  @HiveField(9)
+  String googleAccessToken;
 
   AccountDetails(GoogleSignInAccount account) {
     displayName = account.displayName;
