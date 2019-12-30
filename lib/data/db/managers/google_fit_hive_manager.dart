@@ -44,4 +44,17 @@ class GoogleFitHiveManager {
   GoogleFitBucket saveNewBucket(GoogleFitBucket bucket) {
     box.add(bucket);
   }
+
+  DateTime getLatestRequestTime() {
+    List<GoogleFitBucket> allBuckets = getAllBuckets();
+    if (allBuckets != null) {
+      int latest = 0;
+      allBuckets.forEach((bucket) {
+        int requestTime = bucket.requestTimeInMillis;
+        if (requestTime > latest) {
+          latest = requestTime;
+        }
+      });
+    }
+  }
 }

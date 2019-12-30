@@ -6,8 +6,12 @@ class GoogleFitBucket extends HiveObject{
   @HiveField(0)
   List<GoogleFitStepEntry> entries = List();
 
+  @HiveField(1)
+  int requestTimeInMillis;
+
   GoogleFitBucket(Map<String, dynamic> googleResponse) {
     var bucket = googleResponse['bucket'] as List<dynamic>;
+    requestTimeInMillis = DateTime.now().millisecondsSinceEpoch;
     bucket.forEach((entry) {
       String startTimeMillis = entry["startTimeMillis"];
       String endTimeMillis = entry["endTimeMillis"];
