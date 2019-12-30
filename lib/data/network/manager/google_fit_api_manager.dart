@@ -6,6 +6,7 @@ import 'package:fitbeat/data/network/manager/fitbit_api_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:fitbeat/data/db/managers/account_details_manager.dart';
 import 'package:fitbeat/data/db/models/account_details.dart';
+import 'package:fitbeat/utils/extensions.dart';
 
 class GoogleFitApiManager {
   String buildGoogleEndpoint(String resourcePath) {
@@ -30,8 +31,8 @@ class GoogleFitApiManager {
 
     bucketByTime['durationMillis'] = 86400000;
     body['bucketByTime'] = bucketByTime;
-    body['startTimeMillis'] = DateTime.now().subtract(Duration(days: 14)).millisecondsSinceEpoch;
-    body['endTimeMillis'] = DateTime.now().subtract(Duration(days:7)).millisecondsSinceEpoch;
+    body['startTimeMillis'] = DateTime.now().subtract(Duration(days: 7)).stripTime().millisecondsSinceEpoch;
+    body['endTimeMillis'] = DateTime.now().stripTime().millisecondsSinceEpoch;
     http.Response stepsResponse = await http.post(url, headers: headers, body: json.encode(body)).catchError((error) {
       error.toString();
     });
