@@ -31,12 +31,11 @@ class GoogleFitApiManager {
 
     bucketByTime['durationMillis'] = 86400000;
     body['bucketByTime'] = bucketByTime;
-    body['startTimeMillis'] = DateTime.now().subtract(Duration(days: 7)).stripTime().millisecondsSinceEpoch;
+    body['startTimeMillis'] = GoogleFitHiveManager().getLatestRequestTime();
     body['endTimeMillis'] = DateTime.now().stripTime().millisecondsSinceEpoch;
     http.Response stepsResponse = await http.post(url, headers: headers, body: json.encode(body)).catchError((error) {
       error.toString();
     });
-    String responseBody = stepsResponse.body;
     var jsonResponse = jsonDecode(stepsResponse.body);
     GoogleFitBucket bucket = GoogleFitBucket(jsonResponse);
 
