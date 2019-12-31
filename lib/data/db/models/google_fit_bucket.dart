@@ -1,6 +1,9 @@
 import 'package:fitbeat/data/db/models/google_fit_step_entry.dart';
 import 'package:hive/hive.dart';
 
+part 'google_fit_bucket.g.dart';
+
+@HiveType()
 class GoogleFitBucket extends HiveObject{
 
   @HiveField(0)
@@ -8,6 +11,8 @@ class GoogleFitBucket extends HiveObject{
 
   @HiveField(1)
   int requestTimeInMillis;
+
+  GoogleFitBucket.empty();
 
   GoogleFitBucket(Map<String, dynamic> googleResponse) {
     var bucket = googleResponse['bucket'] as List<dynamic>;

@@ -21,7 +21,6 @@ class FitbitApiManager {
     String url = 'https://api.fitbit.com/1/user/-/activities.json';
 
     Map<String, String> headers = Map<String, String>();
-    Map<String, dynamic> body = Map<String, dynamic>();
 
     headers['Content-Type'] = "application/json;encoding=utf-8";
     headers['Authorization'] = "Bearer ${account.fitbitToken}";
@@ -35,6 +34,5 @@ class FitbitApiManager {
     });
 
     String httpBody = httpResponse.body;
-    httpBody.length;
   }
 }

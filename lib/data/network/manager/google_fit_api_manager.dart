@@ -1,12 +1,12 @@
 import 'dart:convert';
 
+import 'package:fitbeat/data/db/managers/account_details_manager.dart';
 import 'package:fitbeat/data/db/managers/google_fit_hive_manager.dart';
+import 'package:fitbeat/data/db/models/account_details.dart';
 import 'package:fitbeat/data/db/models/google_fit_bucket.dart';
 import 'package:fitbeat/data/network/manager/fitbit_api_manager.dart';
-import 'package:http/http.dart' as http;
-import 'package:fitbeat/data/db/managers/account_details_manager.dart';
-import 'package:fitbeat/data/db/models/account_details.dart';
 import 'package:fitbeat/utils/extensions.dart';
+import 'package:http/http.dart' as http;
 
 class GoogleFitApiManager {
   String buildGoogleEndpoint(String resourcePath) {
@@ -25,7 +25,8 @@ class GoogleFitApiManager {
     headers['Authorization'] = "Bearer ${account.googleAccessToken}";
 
     aggregateBy['dataTypeName'] = 'com.google.step_count.delta';
-    aggregateBy['dataSourceId'] = 'derived:com.google.step_count.delta:com.google.android.gms:estimated_steps';
+    aggregateBy['dataSourceId'] =
+        'derived:com.google.step_count.delta:com.google.android.gms:estimated_steps';
 
     body['aggregateBy'] = [aggregateBy];
 
@@ -33,19 +34,23 @@ class GoogleFitApiManager {
     body['bucketByTime'] = bucketByTime;
     body['startTimeMillis'] = GoogleFitHiveManager().getLatestRequestTime();
     body['endTimeMillis'] = DateTime.now().stripTime().millisecondsSinceEpoch;
-    http.Response stepsResponse = await http.post(url, headers: headers, body: json.encode(body)).catchError((error) {
+    http.Response stepsResponse = await http
+        .post(url, headers: headers, body: json.encode(body))
+        .catchError((error) {
       error.toString();
     });
     var jsonResponse = jsonDecode(stepsResponse.body);
-    GoogleFitBucket bucket = GoogleFitBucket(jsonResponse);
+    if (stepsResponse.statusCode != 400) { //only continue if not 400
+      GoogleFitBucket bucket = GoogleFitBucket(jsonResponse);
 
-    await GoogleFitHiveManager().initialize();
-    GoogleFitHiveManager().saveNewBucket(bucket);
+      await GoogleFitHiveManager().initialize();
+      GoogleFitHiveManager().saveNewBucket(bucket);
 
-    FitbitApiManager fitbitApiManager = FitbitApiManager();
-    bucket.entries.forEach((entry) {
-      fitbitApiManager.setSteps(entry);
-    });
+      FitbitApiManager fitbitApiManager = FitbitApiManager();
+      bucket.entries.forEach((entry) {
+        fitbitApiManager.setSteps(entry);
+      });
+    }
 
     return jsonResponse;
   }

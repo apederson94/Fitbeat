@@ -42,9 +42,7 @@ class AccountDetails extends HiveObject {
     photoUrl = account.photoUrl;
   }
 
-  AccountDetails.empty() {
-    //do nothing
-  }
+  AccountDetails.empty();
 
   bool isEmpty() {
     return email == null;

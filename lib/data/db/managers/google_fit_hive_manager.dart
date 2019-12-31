@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:fitbeat/data/db/models/google_fit_bucket.dart';
+import 'package:fitbeat/data/db/models/google_fit_step_entry.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -22,11 +23,12 @@ class GoogleFitHiveManager {
     Directory directory = await getApplicationDocumentsDirectory();
     if (!initialized) {
       Hive.init(directory.path);
-      //Hive.registerAdapter(, 0);
+      Hive.registerAdapter(GoogleFitBucketAdapter(), 1);
+      Hive.registerAdapter(GoogleFitStepEntryAdapter(), 2);
       initialized = true;
     }
     if (!Hive.isBoxOpen('account')) {
-      Box<GoogleFitBucket> box = await Hive.openBox<GoogleFitBucket>('account');
+      Box<GoogleFitBucket> box = await Hive.openBox<GoogleFitBucket>('buckets');
       this.box = box;
     }
     return this;
@@ -47,7 +49,7 @@ class GoogleFitHiveManager {
 
   int getLatestRequestTime() {
     List<GoogleFitBucket> allBuckets = getAllBuckets();
-    int latest = 0;
+    int latest = DateTime.now().subtract(Duration(days: 90)).millisecondsSinceEpoch;
     if (allBuckets != null) {
       allBuckets.forEach((bucket) {
         int requestTime = bucket.requestTimeInMillis;
