@@ -1,5 +1,4 @@
 
-import 'package:fitbeat/data/assets/assetManager.dart';
 import 'package:fitbeat/data/db/managers/account_details_manager.dart';
 import 'package:fitbeat/data/db/managers/google_fit_hive_manager.dart';
 import 'package:fitbeat/data/network/manager/auth_api_manager.dart';

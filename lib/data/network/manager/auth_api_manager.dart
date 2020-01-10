@@ -1,24 +1,20 @@
 import 'dart:developer';
 
-import 'package:fitbeat/data/assets/assetManager.dart';
 import 'package:fitbeat/data/assets/googleAuthInfo.dart';
 import 'package:fitbeat/data/db/managers/account_details_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AuthApiManager {
-  GoogleAuthInfo googleAuthInfo;
   GoogleSignIn _googleSignIn;
   static AuthApiManager _instance;
 
   static Future<AuthApiManager> getInstance() async {
     if (_instance == null) {
       _instance = AuthApiManager();
-      GoogleAuthInfo authInfo = await AssetManager.getGoogleAuthInfo();
-      _instance.googleAuthInfo = authInfo;
-      var scopes = authInfo.scopes;
+      var scopes = GoogleAuthInfo.scopes;
       _instance._googleSignIn =
-          GoogleSignIn(scopes: scopes, clientId: authInfo.clientId);
+          GoogleSignIn(scopes: scopes, clientId: GoogleAuthInfo.clientId);
     }
 
     return _instance;
