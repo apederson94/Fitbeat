@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fitbeat/data/assets/fitbeatConstants.dart';
 import 'package:fitbeat/data/db/managers/account_details_manager.dart';
 import 'package:fitbeat/data/db/managers/google_fit_hive_manager.dart';
 import 'package:fitbeat/data/db/models/account_details.dart';
@@ -30,7 +31,7 @@ class GoogleFitApiManager {
 
     body['aggregateBy'] = [aggregateBy];
 
-    bucketByTime['durationMillis'] = 86400000;
+    bucketByTime['durationMillis'] = FitbeatConstants.aggregationTime; // 1 minute in millis, used to be 1 day
     body['bucketByTime'] = bucketByTime;
     body['startTimeMillis'] = GoogleFitHiveManager().getLatestRequestTime();
     body['endTimeMillis'] = DateTime.now().stripTime().millisecondsSinceEpoch;

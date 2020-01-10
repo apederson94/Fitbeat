@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 
-class utils {
+class Utils {
   static final Random _random = Random.secure();
 
   static Map<String, dynamic> createCryptoRandomString([int length = 32]) {
@@ -14,7 +14,7 @@ class utils {
     return map;
   }
 
-  static void log_amp(message) {
+  static void logAmp(message) {
     developer.log(message, name: 'amp845');
   }
 

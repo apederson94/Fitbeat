@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:fitbeat/data/network/manager/auth_api_manager.dart';
 import 'package:fitbeat/data/network/manager/google_fit_api_manager.dart';
+import 'package:fitbeat/ui/fitbeatButton.dart';
 import 'package:fitbeat/utils/fitbeat_deeplink.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uni_links/uni_links.dart';
 
-import 'data/assets/stringConstants.dart';
+import 'data/assets/fitbeatConstants.dart';
 import 'data/db/models/account_details.dart';
 import 'data/super_manager.dart';
 import 'utils/utils.dart';
@@ -30,17 +32,17 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       //String initialLink = await getInitialLink();
       FitbeatDeeplink deeplink = FitbeatDeeplink(link);
-      if (deeplink.target == StringConstants.auth) {
+      if (deeplink.target == FitbeatConstants.auth) {
         Map<String, dynamic> mappedDeeplink =
-            utils.parseAuthDeeplink(deeplink.path);
+            Utils.parseAuthDeeplink(deeplink.path);
         superManager.then((manager) {
           AccountDetails account = manager.accountDetailsHiveManager
-              .getAccount(StringConstants.account);
-          account.fitbitToken = mappedDeeplink[StringConstants.accessTokenSC];
-          account.userId = mappedDeeplink[StringConstants.userIdSC];
-          account.scopes.add(mappedDeeplink[StringConstants.scope]);
-          account.tokenType = mappedDeeplink[StringConstants.tokenTypeSC];
-          account.expiresIn = mappedDeeplink[StringConstants.expiresInSC];
+              .getAccount(FitbeatConstants.account);
+          account.fitbitToken = mappedDeeplink[FitbeatConstants.accessTokenSC];
+          account.userId = mappedDeeplink[FitbeatConstants.userIdSC];
+          account.scopes.add(mappedDeeplink[FitbeatConstants.scope]);
+          account.tokenType = mappedDeeplink[FitbeatConstants.tokenTypeSC];
+          account.expiresIn = mappedDeeplink[FitbeatConstants.expiresInSC];
           account.save();
         });
       }
@@ -53,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _deeplinkSub = getLinksStream().listen((String link) {
       handleDeeplink(link);
     }, onError: (err) {
-      utils.log_amp(err.toString());
+      Utils.logAmp(err.toString());
     });
 
     handleDeeplink(await getInitialLink());
@@ -74,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return Scaffold(
                   appBar: AppBar(
                     title: Text(
-                      StringConstants.fitbeatTitle,
+                      FitbeatConstants.fitbeatTitle,
                       textDirection: TextDirection.ltr,
                     ),
                   ),
@@ -89,56 +91,48 @@ class _HomeScreenState extends State<HomeScreen> {
                                     snapshot.data.accountDetailsHiveManager.box,
                                 builder: (context, accountBox) {
                                   AccountDetails account =
-                                      accountBox.get(StringConstants.account);
+                                      accountBox.get(FitbeatConstants.account);
                                   return Column(
-                                    children: <Widget>[
-                                      account.displayName != null
-                                          ? Text(StringConstants
-                                                  .thanksForLoggingIn +
-                                              account.displayName)
-                                          : FlatButton(
-                                              color: Colors.blueAccent,
-                                              child: Text(
-                                                StringConstants.pleaseLogin,
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                              onPressed: () async {
-                                                snapshot.data
-                                                    .accountDetailsHiveManager
-                                                    .saveNewAccount(
-                                                        await snapshot
-                                                            .data.authManager
-                                                            .login());
-                                              }),
-                                      account.fitbitToken != null
-                                          ? Text(StringConstants
-                                              .fitbitAuthenticated)
-                                          : FlatButton(
-                                              color: Colors.blueAccent,
-                                              child: Text(
-                                                  StringConstants
-                                                      .connectToFitbit,
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
-                                              onPressed: () {
-                                                AuthApiManager.getInstance()
-                                                    .then((manager) {
-                                                  manager.authorizeFitbit();
-                                                });
-                                              },
-                                            ),
-                                    ],
+                                    children: account != null
+                                        ? <Widget>[
+                                            account.displayName != null
+                                                ? Text(FitbeatConstants
+                                                        .thanksForLoggingIn +
+                                                    account.displayName)
+                                                : FitbeatButton.create(
+                                                    text: FitbeatConstants
+                                                        .pleaseLogin,
+                                                    onPressed: () async {
+                                                      snapshot.data
+                                                          .accountDetailsHiveManager
+                                                          .saveNewAccount(
+                                                              await snapshot
+                                                                  .data
+                                                                  .authManager
+                                                                  .login());
+                                                    }),
+                                            account.fitbitToken != null
+                                                ? Text(FitbeatConstants
+                                                    .fitbitAuthenticated)
+                                                : FitbeatButton.create(
+                                                    text: FitbeatConstants
+                                                        .connectToFitbit,
+                                                    onPressed: () {
+                                                      AuthApiManager
+                                                              .getInstance()
+                                                          .then((manager) {
+                                                        manager
+                                                            .authorizeFitbit();
+                                                      });
+                                                    })
+                                          ]
+                                        : <Widget>[Text(FitbeatConstants.uhOh)],
                                   );
                                 },
                               )
-                            : Text(StringConstants.uhOh),
-                        FlatButton(
-                          color: Colors.blueAccent,
-                          child: Text(
-                            StringConstants.makeRequest,
-                            style: TextStyle(color: Colors.white),
-                          ),
+                            : Text(FitbeatConstants.uhOh),
+                        FitbeatButton.create(
+                          text: FitbeatConstants.makeRequest,
                           onPressed: () async {
                             await GoogleFitApiManager().getSteps();
                           },
@@ -149,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 void main() => runApp(MaterialApp(
-    title: StringConstants.fitbeatTitle,
+    title: FitbeatConstants.fitbeatTitle,
     routes: <String, WidgetBuilder>{'/': (context) => HomeScreen()}));
 
 class HomeScreen extends StatefulWidget {

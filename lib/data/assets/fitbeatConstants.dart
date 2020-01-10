@@ -1,10 +1,10 @@
-class StringConstants {
+class FitbeatConstants {
   static String pleaseLogin = "Please Login";
   static String account = "account";
   static String fitbitAuthenticated = "Authenticated with Fitbit!";
   static String fitbitNotAuthenticated = "Please authenticate with Fitbit.";
   static String googleAuthenticated = "Authenticated with Google!";
-  static String GoogleNotAuthenticated = "Please login to your Google account";
+  static String googleNotAuthenticated = "Please login to your Google account";
   static String fitbeatTitle = "Fitbeat";
   static String auth = "auth";
   static String accessTokenSC = "access_token";
@@ -18,4 +18,5 @@ class StringConstants {
   static String thanksForLoggingIn = 'Thanks for logging into google %s!';
   static String uhOh = 'Uh Oh!';
   static String makeRequest = 'Make Request';
+  static int aggregationTime = 60000;
 }
