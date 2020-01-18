@@ -126,7 +126,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       });
                                                     })
                                           ]
-                                        : <Widget>[Text(FitbeatConstants.uhOh)],
+                                        : <Widget>[
+                                            FitbeatButton.create(
+                                                text: FitbeatConstants
+                                                    .pleaseLogin,
+                                                onPressed: () async {
+                                                  snapshot.data
+                                                      .accountDetailsHiveManager
+                                                      .saveNewAccount(
+                                                          await snapshot
+                                                              .data.authManager
+                                                              .login());
+                                                })
+                                          ],
                                   );
                                 },
                               )
