@@ -17,22 +17,16 @@ class StepsScreen extends StatelessWidget {
           body: snapshot.hasData
               ? snapshot.data.getAllBuckets().isNotEmpty
                   ? ListView.builder(
-                      itemCount: snapshot.data.getAllBuckets().length,
-                      itemBuilder: (context, bucketIndex) {
-                        return ListView.builder(
-                            itemCount: snapshot.data
-                                .getAllBuckets()[bucketIndex]
-                                .entries
-                                .length,
-                            itemBuilder: (context, entryIndex) {
-                              return Text(snapshot.data
-                                      .getAllBuckets()[bucketIndex]
-                                      .entries[entryIndex]
-                                      .startTimeMillis +
-                                  "${snapshot.data.getAllBuckets()[bucketIndex].entries[entryIndex].stepCount}");
-                            });
-                      },
-                    ).build(context)
+                      itemCount: snapshot.data.getAllSteps().length,
+                      itemBuilder: (context, entryIndex) {
+                        return Text("start: " +
+                            DateTime.fromMillisecondsSinceEpoch(int.parse(
+                                    snapshot.data
+                                        .getAllSteps()[entryIndex]
+                                        .startTimeMillis))
+                                .toIso8601String() +
+                            " steps: ${snapshot.data.getAllSteps()[entryIndex].stepCount}");
+                      })
                   : Text('USER DOES NOT HAVE DATA')
               : Text("COULD NOT FIND DATABASE"),
         );

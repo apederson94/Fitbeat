@@ -42,6 +42,16 @@ class GoogleFitHiveManager {
 
     return allBuckets;
   }
+
+  List<GoogleFitStepEntry> getAllSteps() {
+    var buckets = getAllBuckets();
+    var steps = List<GoogleFitStepEntry>();
+    for (var value in buckets) {
+      steps.addAll(value.entries);
+    }
+
+    return steps;
+  }
   
   void saveNewBucket(GoogleFitBucket bucket) {
     box.add(bucket);

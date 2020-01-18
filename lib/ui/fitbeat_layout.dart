@@ -13,7 +13,9 @@ class FitbeatLayout {
           BottomNavigationBarItem(title: Text("Home"), icon: Icon(Icons.home)),
           BottomNavigationBarItem(title: Text("Steps"), icon: Icon(Icons.directions_walk)),
         ],
-        onTap: ,
+        onTap: (value) {
+
+        },
       ),
     );
   }
