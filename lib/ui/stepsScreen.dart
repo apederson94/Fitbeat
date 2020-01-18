@@ -9,22 +9,38 @@ class StepsScreen extends StatelessWidget {
     // TODO: implement build
     return Material(
         child: FutureBuilder(
-          future: GoogleFitHiveManager().initialize(),
-          builder: (context, AsyncSnapshot<GoogleFitHiveManager> snapshot) {
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(
-                  FitbeatConstants.steps,
-                  textDirection: TextDirection.ltr,
-                ),
-              ),
-              body: snapshot.hasData
-                  ? snapshot.data.getAllBuckets().isNotEmpty
-                  ? Text('NEED TO BUILD TABLE OF STEPS STILL')
+      future: GoogleFitHiveManager().initialize(),
+      builder: (context, AsyncSnapshot<GoogleFitHiveManager> snapshot) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              FitbeatConstants.steps,
+              textDirection: TextDirection.ltr,
+            ),
+          ),
+          body: snapshot.hasData
+              ? snapshot.data.getAllBuckets().isNotEmpty
+                  ? ListView.builder(
+                      itemCount: snapshot.data.getAllBuckets().length,
+                      itemBuilder: (context, bucketIndex) {
+                        return ListView.builder(
+                            itemCount: snapshot.data
+                                .getAllBuckets()[bucketIndex]
+                                .entries
+                                .length,
+                            itemBuilder: (context, entryIndex) {
+                              return Text(snapshot.data
+                                      .getAllBuckets()[bucketIndex]
+                                      .entries[entryIndex]
+                                      .startTimeMillis +
+                                  "${snapshot.data.getAllBuckets()[bucketIndex].entries[entryIndex].stepCount}");
+                            });
+                      },
+                    )
                   : Text('USER DOES NOT HAVE DATA')
-                  : Text("COULD NOT FIND DATABASE"),
-            );
-          },
-        ));
+              : Text("COULD NOT FIND DATABASE"),
+        );
+      },
+    ));
   }
 }
