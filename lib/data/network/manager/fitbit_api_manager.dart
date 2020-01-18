@@ -28,11 +28,8 @@ class FitbitApiManager {
     url +=
         '?activityId=$activityId&startTime=$startTime&durationMillis=$durationMillis&date=$date&distance=${stepEntry.stepCount}&distanceUnit=steps';
 
-    http.Response httpResponse =
-        await http.post(url, headers: headers).catchError((error) {
+    await http.post(url, headers: headers).catchError((error) {
       error.toString();
     });
-
-    String httpBody = httpResponse.body;
   }
 }
