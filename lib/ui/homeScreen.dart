@@ -5,6 +5,7 @@ import 'package:fitbeat/data/db/models/account_details.dart';
 import 'package:fitbeat/data/network/manager/auth_api_manager.dart';
 import 'package:fitbeat/data/network/manager/google_fit_api_manager.dart';
 import 'package:fitbeat/data/super_manager.dart';
+import 'package:fitbeat/ui/fitbeat_layout.dart';
 import 'package:fitbeat/utils/fitbeat_deeplink.dart';
 import 'package:fitbeat/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -73,13 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: FutureBuilder(
             future: superManager,
             builder: (context, AsyncSnapshot<SuperManager> snapshot) {
-              return Scaffold(
-                  appBar: AppBar(
-                    title: Text(
-                      FitbeatConstants.fitbeatTitle,
-                      textDirection: TextDirection.ltr,
-                    ),
-                  ),
+              return FitbeatLayout.create(
+                  title: FitbeatConstants.fitbeatTitle,
                   body: Center(
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -154,7 +150,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             onPressed: () {
                               Navigator.pushNamed(context, '/steps');
                             })
-                      ])));
+                      ])),
+                  onTap: (value) {
+
+                  });
             }));
   }
 }
