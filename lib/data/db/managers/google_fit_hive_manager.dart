@@ -49,7 +49,7 @@ class GoogleFitHiveManager {
 
   int getLatestRequestTime() {
     List<GoogleFitBucket> allBuckets = getAllBuckets();
-    int latest = DateTime.now().subtract(Duration(days: 90)).millisecondsSinceEpoch;
+    int latest = DateTime.now().subtract(Duration(days: 60)).millisecondsSinceEpoch;
     if (allBuckets != null) {
       allBuckets.forEach((bucket) {
         int requestTime = bucket.requestTimeInMillis;
