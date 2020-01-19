@@ -137,11 +137,6 @@ class _DashboardState extends State<Dashboard> {
                           await GoogleFitApiManager().getSteps();
                         },
                       ),
-                      FitbeatButton.create(
-                          text: FitbeatConstants.viewSteps,
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/steps');
-                          })
                     ]),
               );
             }));
