@@ -1,5 +1,4 @@
-import 'package:fitbeat/data/db/managers/google_fit_hive_manager.dart';
-import 'package:fitbeat/ui/homeScreen.dart';
+import r'package:fitbeat/ui/homeScreen.dart';
 import 'package:fitbeat/ui/stepsScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:fitbeat/data/db/models/google_fit_bucket.dart';
@@ -52,14 +51,15 @@ class GoogleFitHiveManager {
 
     return steps;
   }
-  
+
   void saveNewBucket(GoogleFitBucket bucket) {
     box.add(bucket);
   }
 
   int getLatestRequestTime() {
     List<GoogleFitBucket> allBuckets = getAllBuckets();
-    int latest = DateTime.now().subtract(Duration(days: 60)).millisecondsSinceEpoch;
+    int latest =
+        DateTime.now().subtract(Duration(days: 60)).millisecondsSinceEpoch;
     if (allBuckets != null) {
       allBuckets.forEach((bucket) {
         int requestTime = bucket.requestTimeInMillis;
@@ -69,5 +69,39 @@ class GoogleFitHiveManager {
       });
     }
     return latest;
+  }
+
+  Map<String, List<GoogleFitStepEntry>> getDailyStepEntries() {
+    Map<String, List<GoogleFitStepEntry>> entriesByDay =
+        Map<String, List<GoogleFitStepEntry>>();
+    List<GoogleFitStepEntry> dateStepEntry = List<GoogleFitStepEntry>();
+    var entries = getAllBuckets();
+    DateTime previousDate = DateTime.fromMillisecondsSinceEpoch(
+        int.parse(entries.first.entries.first.startTimeMillis));
+
+    entries.forEach((bucket) {
+      bucket.entries.forEach((entry) {
+        var start = entry.startTimeMillis;
+        var date = DateTime.fromMillisecondsSinceEpoch(int.parse(start));
+
+        if (previousDate.day != date.day ||
+            previousDate.month != date.month ||
+            previousDate.year != date.year) {
+          String formattedDate = previousDate.month.toString() +
+              "/" +
+              previousDate.day.toString() +
+              "/" +
+              previousDate.year.toString();
+          entriesByDay[formattedDate] = dateStepEntry;
+          dateStepEntry = List<GoogleFitStepEntry>();
+        }
+
+        dateStepEntry.add(entry);
+
+        previousDate = date;
+      });
+    });
+
+    return entriesByDay;
   }
 }

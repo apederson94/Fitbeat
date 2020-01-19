@@ -1,3 +1,4 @@
+import 'package:fitbeat/data/db/models/google_fit_step_entry.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 
@@ -9,6 +10,18 @@ extension dynamicListConversion on List<dynamic> {
     });
 
     return tmp;
+  }
+}
+
+extension googleFitStepEntries on List<GoogleFitStepEntry> {
+  int getTotalSteps() {
+    int stepCount = 0;
+
+    this.forEach((value) => {
+      stepCount += value.stepCount
+    });
+
+    return stepCount;
   }
 }
 
@@ -31,5 +44,4 @@ extension timeStrip on DateTime {
     dateFormat.format(this);
     return this;
   }
-
 }
