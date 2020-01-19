@@ -8,6 +8,5 @@ import 'data/assets/fitbeatConstants.dart';
 void main() => runApp(MaterialApp(
         title: FitbeatConstants.fitbeatTitle,
         routes: <String, WidgetBuilder>{
-          '/': (context) => HomeScreen(),
-          '/steps': (context) => StepsScreen()
+          '/': (context) => HomeScreen()
         }));
