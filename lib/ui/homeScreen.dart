@@ -11,11 +11,6 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     Destination destination = _children[_currentIndex];
     return Scaffold(
@@ -24,10 +19,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: destination.body,
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(title: Text("Home"), icon: Icon(Icons.home), activeIcon: Icon(Icons.home, color: Colors.blueAccent,)),
+          BottomNavigationBarItem(title: Text("Home"), icon: Icon(Icons.home)),
           BottomNavigationBarItem(
-              title: Text("Steps"), icon: Icon(Icons.directions_walk), activeIcon: Icon(Icons.directions_walk, color: Colors.blueAccent)),
+              title: Text("Steps"), icon: Icon(Icons.directions_walk))
         ],
         onTap: (index) => setState(() => _currentIndex = index),
       ),

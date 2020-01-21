@@ -45,7 +45,9 @@ class StepsScreen extends StatelessWidget {
                         .toList(),
                   )))
                 : Center(child: Text('USER DOES NOT HAVE DATA'))
-            : Center(child: Text("COULD NOT FIND DATABASE"));
+            : Center(
+                child: Text('Loading...'),
+              );
       },
     ));
   }
